@@ -7,17 +7,37 @@
     <main>
       <%- include('partials/navigation', { menuLinks: menuLinks, activeLinkPath:
       activeLinkPath, cartCount: cartCount }); %>
+
       <h1 class="heading">Products</h1>
+
       <% if (products?.length > 0) { %>
-      <ul>
-        <% products.forEach(product => { %>
-        <li><%- include('partials/card', { product: product }); %></li>
-        <% }); %>
-      </ul>
+      <div class="products-container">
+        <% products.forEach(product => { %> <%- include('partials/card', {
+        product: product }); %> <% }); %>
+      </div>
       <% } else { %>
       <br />
       <div>No products available.</div>
-      <% }%>
+      <% } %>
     </main>
+
+    <script>
+      function deleteProduct(name) {
+        if (!confirm(`Are you sure you want to remove ${name}?`)) {
+          return;
+        }
+
+        fetch(`/products/${name}`, {
+          method: "DELETE",
+        }).then((response) => {
+          console.log(response);
+          if (response.ok) {
+            window.location.reload();
+          } else {
+            alert("Error while removing product.");
+          }
+        });
+      }
+    </script>
   </body>
 </html>
